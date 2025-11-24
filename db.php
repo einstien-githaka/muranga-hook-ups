@@ -37,7 +37,8 @@ if (getenv('DATABASE_URL') && getenv('DATABASE_URL') !== '') {
 else {
 
     // Force TCP (fixes "No such file or directory" errors)
-    $conn = new mysqli('127.0.0.1', 'root', '', 'muranga-hookups');
+    $conn = new mysqli('127.0.0.1', 'root', "", 'muranga-hookups');
+
 
     if ($conn->connect_error) {
         die('Start MySQL in XAMPP! Error: ' . $conn->connect_error);
@@ -58,3 +59,4 @@ if (!$conn || $conn->connect_error) {
     };
 }
 ?>
+
