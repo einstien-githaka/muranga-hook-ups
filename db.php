@@ -22,7 +22,7 @@ if (getenv('DATABASE_URL') && getenv('DATABASE_URL') !== '') {
 }
 // === LOCAL XAMPP ONLY ===
 else {
-    $conn = new mysqli('localhost', 'root', '', 'muranga_hook-ups');
+    $conn = new mysqli('localhost', 'root', 'Object(SensitiveParameterValue)', 'muranga_hook-ups.');
     if ($conn->connect_error) {
         die('Start MySQL in XAMPP!');
     }
@@ -37,4 +37,5 @@ if (!$conn || $conn->connect_error) {
     };
 }
 ?>
+
 
