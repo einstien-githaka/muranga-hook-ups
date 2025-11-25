@@ -3,14 +3,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-/*
-|--------------------------------------------------------------------------
-| 1. RENDER HOSTING (ONLINE) DATABASE
-|--------------------------------------------------------------------------
-| If DATABASE_URL exists, we assume the site is running online.
-*/
+// === RENDER (ONLINE) DATABASE ===
 if (getenv('DATABASE_URL') && getenv('DATABASE_URL') !== '') {
-
     $url = parse_url(getenv('DATABASE_URL'));
 
     $host     = $url['host'];
@@ -26,31 +20,15 @@ if (getenv('DATABASE_URL') && getenv('DATABASE_URL') !== '') {
         $conn = null;
     }
 }
-
-/*
-|--------------------------------------------------------------------------
-| 2. LOCAL XAMPP DATABASE
-|--------------------------------------------------------------------------
-| When developing on localhost.
-| MySQL root has no password in XAMPP.
-*/
+// === LOCAL XAMPP ONLY ===
 else {
-
-    // Force TCP (fixes "No such file or directory" errors)
-    $conn = new mysqli('127.0.0.1', 'root', "", 'muranga-hookups');
-
-
+    $conn = new mysqli('localhost', 'root', '', 'muranga_hooks');
     if ($conn->connect_error) {
-        die('Start MySQL in XAMPP! Error: ' . $conn->connect_error);
+        die('Start MySQL in XAMPP!');
     }
 }
 
-/*
-|--------------------------------------------------------------------------
-| 3. FAILSAFE CONNECTION
-|--------------------------------------------------------------------------
-| If DB fails, we create a dummy object so the site does not crash.
-*/
+// === FALLBACK: never crash the site ===
 if (!$conn || $conn->connect_error) {
     $conn = new class {
         public function real_escape_string($s) { return addslashes($s); }
@@ -59,4 +37,3 @@ if (!$conn || $conn->connect_error) {
     };
 }
 ?>
-
